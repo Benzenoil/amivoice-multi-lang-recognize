@@ -47,8 +47,6 @@ def upload_file():
             }
         )
         response.raise_for_status()
-        logging.debug(f'Response from Amivoice using {engine}')
-        logging.debug(response.json())
         return response.json()
     else:
         return jsonify({'error': 'File size exceeds limit'}), 413

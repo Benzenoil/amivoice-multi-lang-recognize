@@ -38,6 +38,7 @@ function App() {
 
   const onFileUpload = async () => {
     setIsUploading(true);
+    setbiLangModelResult(null);
 
     const upload_url = 'http://localhost:5051/upload';
     const compare_url = 'http://localhost:5051/bi-lang';

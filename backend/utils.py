@@ -120,12 +120,17 @@ def get_final_result(result1, result2) -> dict:
     result_format['results'] = [{}]
     result_format['results'][0]['tokens'] = []
 
+    weighted_sum = 0
+    time_sum = 0
     for segment in result:
         for token in segment:
             result_format['results'][0]['tokens'].append(token)
             result_format['text'] += token.get('written', '') + ' '
+            weighted_sum += token['confidence'] * \
+                (token['endtime'] - token['starttime'])
+            time_sum += token['endtime'] - token['starttime']
 
-    result_format['results'][0]['confidence'] = 0.0
+    result_format['results'][0]['confidence'] = weighted_sum / time_sum
 
     return result_format
 
