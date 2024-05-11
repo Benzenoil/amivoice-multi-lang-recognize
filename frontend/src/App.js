@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Collapse, Table, Button, Input, message, Upload } from 'antd';
+import { Collapse, Table, Button, Input, message, Upload, Spin } from 'antd';
 import { UploadOutlined, CopyOutlined } from '@ant-design/icons';
 
 
 function App() {
   const [file, setFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [jpnModelResult, setJpnModelResult] = useState(null);
   const [engModelResult, setEngModelResult] = useState(null);
   const [biLangModelResult, setbiLangModelResult] = useState(null);
@@ -36,11 +37,14 @@ function App() {
   };
 
   const onFileUpload = async () => {
+    setIsUploading(true);
+
     const upload_url = 'http://localhost:5051/upload';
     const compare_url = 'http://localhost:5051/bi-lang';
 
     if (!file) {
       message.error('Please select a file');
+      setIsUploading(false);
       return;
     }
 
@@ -70,6 +74,8 @@ function App() {
       setBiLangModelRawResult(JSON.stringify(response3.data, null, 2));
     } catch (error) {
       message.error('Failed to upload file');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -125,9 +131,9 @@ function App() {
     <div className="App">
       <h1>AmiVoice Hands On Demo</h1>
       <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Select MP3 or WAV File</Button>
+        <Button icon={<UploadOutlined />} disabled={isUploading}>Select MP3 or WAV File</Button>
       </Upload>
-      <Button onClick={onFileUpload} style={{ margin: '10px' }}>Upload</Button>
+      <Button onClick={onFileUpload} style={{ margin: '10px' }} disabled={isUploading}>Upload</Button> {isUploading ? <Spin size="large" /> : null}
       {jpnModelResult && (
         <div>
           <Table dataSource={dataSource} columns={columns} pagination={false} />
