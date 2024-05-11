@@ -110,7 +110,6 @@ def compare_segments(linked_list1, linked_list2):
 
 
 def get_final_result(result1, result2) -> dict:
-
     model1_token_linklist = json_to_linkedlist(result1)
     model2_token_linklist = json_to_linkedlist(result2)
 

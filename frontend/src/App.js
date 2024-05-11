@@ -68,10 +68,17 @@ function App() {
       const formData3 = new FormData();
       formData3.append("result_data", JSON.stringify(response1.data));
       formData3.append("result_data2", JSON.stringify(response2.data));
-
-      const response3 = await axios.post(compare_url, formData3);
-      setbiLangModelResult(response3.data);
-      setBiLangModelRawResult(JSON.stringify(response3.data, null, 2));
+      if (response1.data['results'][0]['confidence'] > 0.999) {
+        setbiLangModelResult(response1.data);
+        setBiLangModelRawResult('JPN model is really good confidence, so use it!');
+      } else if (response2.data['results'][0]['confidence'] > 0.999) {
+        setbiLangModelResult(response2.data);
+        setBiLangModelRawResult('ENG model is really good confidence, so use it!');
+      } else {
+        const response3 = await axios.post(compare_url, formData3);
+        setbiLangModelResult(response3.data);
+        setBiLangModelRawResult(JSON.stringify(response3.data, null, 2));
+      }
     } catch (error) {
       message.error('Failed to upload file');
     } finally {
