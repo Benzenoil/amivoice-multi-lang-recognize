@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3031:3031"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - PORT=3031
+    depends_on:
+      - backend
+  backend:
+    build: ./backend
+    ports:
+      - "5051:5051"
+    volumes:
+      - ./backend:/app
+    command: python app.py
